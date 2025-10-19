@@ -8,48 +8,47 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-# Railway API endpoint
+# grab the api url from env or just use localhost
 API_URL = os.getenv('API_URL', 'http://localhost:5001')
 
 print(API_URL)
 
 def capture_and_recognize():
-    """Capture image and send to API for recognition"""
+    """capture a pic, send to the ML model, show the result"""
     
-    print("📷 Capturing image...")
+    print("taking a photo...")
 
-    # Prepare directory for test images: always resolve relative to repo root
+    # make sure we've got a test_images folder in the right spot
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     test_images_dir = os.path.join(repo_root, "client", "test_images")
     os.makedirs(test_images_dir, exist_ok=True)
     
-    # Capture from camera 0 for mac
-    # Capture from camera 1 for orangepi
+    # using camera 1 (change if your cam is different)
     camera = cv2.VideoCapture(1)
     
     if not camera.isOpened():
-        print("❌ Error: Could not open camera")
+        print("couldn't open the camera :(")
         return
     
-    # Let camera warm up
+    # letting the camera warm up a bit
     time.sleep(0.5)
     
-    # Capture frame
+    # grab one frame
     ret, frame = camera.read()
     camera.release()
     
     if not ret:
-        print("❌ Error: Could not capture image")
+        print("couldn't grab an image from the camera")
         return
 
-    # Save image temporarily
+    # save the image so we can upload it
     image_path = os.path.join(test_images_dir, f"capture_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg")
-    print(image_path)
+    print(f"saving image here: {image_path}")
     cv2.imwrite(image_path, frame)
-    print(f"✅ Image captured: {image_path}")
-    
-    # Send to API
-    print("☁️  Sending to API for recognition...")
+    print(f"saved the photo")
+
+    # now send it to the api and ask for faces
+    print("sending image up to the ML model for checking...")
     
     try:
         with open(image_path, 'rb') as img_file:
@@ -60,67 +59,67 @@ def capture_and_recognize():
             result = response.json()
             
             if result.get('success'):
-                print(f"\n{'='*50}")
-                print(f"🎯 Recognition Results")
-                print(f"{'='*50}")
-                print(f"Total faces detected: {result['total_faces']}")
-                print(f"Image size: {result['image_size']['width']}x{result['image_size']['height']}\n")
+                print("="*50)
+                print("these are the recognition results")
+                print("="*50)
+                print(f"found {result['total_faces']} face(s)")
+                print(f"image size: {result['image_size']['width']} x {result['image_size']['height']}")
+                print()
                 
                 for i, face in enumerate(result['faces'], 1):
-                    print(f"Face {i}:")
-                    print(f"  👤 Name: {face['name']}")
-                    print(f"  📊 Confidence: {face['confidence']:.1f}%")
-                    print(f"  📍 Location: ({face['location']['left']}, {face['location']['top']}) "
-                          f"to ({face['location']['right']}, {face['location']['bottom']})")
+                    print(f"face #{i}:")
+                    print(f"  the name: {face['name']}")
+                    print(f"  confidence: {face['confidence']:.1f}%")
+                    print(f"  location: ({face['location']['left']}, {face['location']['top']}) -> ({face['location']['right']}, {face['location']['bottom']})")
                     print()
                 
                 return result
             else:
-                print(f"❌ Recognition failed: {result.get('error')}")
+                print(f"didn't work: {result.get('error')}")
         else:
-            print(f"❌ Server error: Status {response.status_code}")
+            print(f"server gave an error: code {response.status_code}")
             print(response.text)
             
     except requests.exceptions.Timeout:
-        print("❌ Request timed out")
+        print("the request took too long and timed out")
     except requests.exceptions.RequestException as e:
-        print(f"❌ Network error: {e}")
+        print(f"couldn't send the image: {e}")
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"some other error happened: {e}")
     finally:
-        # Clean up temp file
+        # get rid of the image file after sending
         if os.path.exists(image_path):
             os.remove(image_path)
 
 def check_health():
-    """Check if API is healthy"""
+    """just check if the api is up and see what's loaded"""
     health_url = f"{API_URL}/health"
     
     try:
         response = requests.get(health_url, timeout=10)
         if response.status_code == 200:
             data = response.json()
-            print(f"✅ API Status: {data['status']}")
-            print(f"📊 Faces loaded: {data['faces_loaded']}")
-            print(f"👥 Known people: {', '.join(data['known_people'])}")
+            print(f"api status: {data['status']}")
+            print(f"faces loaded: {data['faces_loaded']}")
+            print(f"people known: {', '.join(data['known_people'])}")
         else:
-            print(f"❌ API unhealthy: {response.status_code}")
+            print(f"api not healthy (status {response.status_code})")
     except Exception as e:
-        print(f"❌ Cannot reach API: {e}")
+        print(f"can't reach the api: {e}")
 
 def continuous_monitoring(interval=5):
-    """Continuously capture and recognize at intervals"""
+    """just keeps capturing every so often until you stop it ctrl+c"""
     
-    print(f"🔄 Starting continuous monitoring (every {interval} seconds)")
-    print("Press Ctrl+C to stop\n")
+    print(f"starting monitoring, grabbing a photo every {interval} seconds")
+    print("hit ctrl+c when you're over it\n")
     
     try:
         while True:
             capture_and_recognize()
-            print(f"\n⏳ Waiting {interval} seconds...\n")
+            print(f"\nwaiting {interval} seconds...\n")
             time.sleep(interval)
     except KeyboardInterrupt:
-        print("\n\n👋 Stopped monitoring")
+        print("\nok, stopped monitoring")
 
 if __name__ == "__main__":
     import sys

@@ -24,3 +24,5 @@ __pycache__/
 .env
 
 .vercel
+
+client/test_images/*

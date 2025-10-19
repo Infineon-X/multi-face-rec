@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Set your Vercel API URL
-export API_URL="https://multi-face-rec.vercel.app/api/recognize"
+# Set your API URL (default to localhost)
+export API_URL="${API_URL:-http://localhost:5000/recognize}"
 
-echo "🎯 Face Recognition Client (Vercel)"
+echo "🎯 Face Recognition Client"
 echo "====================================="
 echo ""
 echo "API: $API_URL"

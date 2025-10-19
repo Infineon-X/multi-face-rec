@@ -23,11 +23,13 @@ except Exception as e:
 @app.route('/', methods=['GET'])
 def home():
     return jsonify({
-        'status': 'Face Recognition API',
+        'name': 'Face Recognition API',
         'version': '1.0',
+        'status': 'healthy' if encodings else 'unhealthy',
         'endpoints': {
-            '/health': 'GET - Check API health',
-            '/recognize': 'POST - Recognize faces in image'
+            '/': 'GET - API info',
+            '/health': 'GET - Health check',
+            '/recognize': 'POST - Recognize faces (multipart/form-data with "image" field)'
         }
     })
 
@@ -131,5 +133,5 @@ def recognize():
         }), 500
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 5001))
     app.run(host='0.0.0.0', port=port, debug=False)

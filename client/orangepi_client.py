@@ -4,16 +4,20 @@ import requests
 import cv2
 import time
 from datetime import datetime
-import json
 import os
 
-# Vercel API endpoint
-API_URL = os.getenv('API_URL', 'https://multi-face-rec-production.up.railway.app')
+# Railway API endpoint
+API_URL = os.getenv('API_URL', 'http://localhost:5001')
 
 def capture_and_recognize():
-    """Capture image and send to Vercel for recognition"""
+    """Capture image and send to API for recognition"""
     
     print("📷 Capturing image...")
+
+    # Prepare directory for test images: always resolve relative to repo root
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    test_images_dir = os.path.join(repo_root, "client", "test_images")
+    os.makedirs(test_images_dir, exist_ok=True)
     
     # Capture from camera
     camera = cv2.VideoCapture(0)
@@ -32,19 +36,21 @@ def capture_and_recognize():
     if not ret:
         print("❌ Error: Could not capture image")
         return
-    
+
     # Save image temporarily
-    image_path = f"/tmp/capture_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg"
+    image_path = os.path.join(test_images_dir, f"capture_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg")
+    print(image_path)
+    print(frame)
     cv2.imwrite(image_path, frame)
     print(f"✅ Image captured: {image_path}")
     
-    # Send to Vercel API
-    print("☁️  Sending to Vercel for recognition...")
+    # Send to API
+    print("☁️  Sending to API for recognition...")
     
     try:
         with open(image_path, 'rb') as img_file:
             files = {'image': img_file}
-            response = requests.post(API_URL, files=files, timeout=30)
+            response = requests.post(f"{API_URL}/recognize", files=files, timeout=30)
         
         if response.status_code == 200:
             result = response.json()
@@ -72,7 +78,7 @@ def capture_and_recognize():
             print(response.text)
             
     except requests.exceptions.Timeout:
-        print("❌ Request timed out - Vercel function may need more time")
+        print("❌ Request timed out")
     except requests.exceptions.RequestException as e:
         print(f"❌ Network error: {e}")
     except Exception as e:
@@ -84,7 +90,7 @@ def capture_and_recognize():
 
 def check_health():
     """Check if API is healthy"""
-    health_url = API_URL.replace('/recognize', '/health')
+    health_url = f"{API_URL}/health"
     
     try:
         response = requests.get(health_url, timeout=10)

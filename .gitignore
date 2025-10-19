@@ -1,6 +1,14 @@
 .venv/
 encodings.pkl
-training/
+training/*/*.jpg
+training/*/*.jpeg
+training/*/*.png
+training/*/*.gif
+training/*/*.bmp
+training/*/*.tiff
+training/*/*.webp
+training/*/*.ico
+training/*/*.svg
 __pycache__/
 *.pyc
 *.pyo

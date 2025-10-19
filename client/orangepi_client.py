@@ -23,8 +23,9 @@ def capture_and_recognize():
     test_images_dir = os.path.join(repo_root, "client", "test_images")
     os.makedirs(test_images_dir, exist_ok=True)
     
-    # Capture from camera
-    camera = cv2.VideoCapture(0)
+    # Capture from camera 0 for mac
+    # Capture from camera 1 for orangepi
+    camera = cv2.VideoCapture(1)
     
     if not camera.isOpened():
         print("❌ Error: Could not open camera")

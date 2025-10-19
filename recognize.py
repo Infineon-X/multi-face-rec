@@ -106,7 +106,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         test_image = sys.argv[1]
     else:
-        test_image = "test_images/test1.jpg"
+        test_image = "test_images/test0.jpg"
     
     # Create output filename
     output_image = test_image.replace('.jpg', '_output.jpg').replace('.png', '_output.png')

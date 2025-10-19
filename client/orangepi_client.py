@@ -11,6 +11,7 @@ load_dotenv()
 # Railway API endpoint
 API_URL = os.getenv('API_URL', 'http://localhost:5001')
 
+print(API_URL)
 
 def capture_and_recognize():
     """Capture image and send to API for recognition"""
@@ -43,7 +44,6 @@ def capture_and_recognize():
     # Save image temporarily
     image_path = os.path.join(test_images_dir, f"capture_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg")
     print(image_path)
-    print(frame)
     cv2.imwrite(image_path, frame)
     print(f"✅ Image captured: {image_path}")
     

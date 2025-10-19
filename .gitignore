@@ -1,4 +1,5 @@
 .venv/
+venv/
 encodings.pkl
 training/*/*.jpg
 training/*/*.jpeg

@@ -11,7 +11,7 @@ load_dotenv()
 # grab the api url from env or just use localhost
 API_URL = os.getenv('API_URL', 'http://localhost:5001')
 
-print(API_URL)
+# print(API_URL)
 
 def capture_and_recognize():
     """capture a pic, send to the ML model, show the result"""

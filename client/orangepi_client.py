@@ -5,9 +5,12 @@ import cv2
 import time
 from datetime import datetime
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Railway API endpoint
 API_URL = os.getenv('API_URL', 'http://localhost:5001')
+
 
 def capture_and_recognize():
     """Capture image and send to API for recognition"""

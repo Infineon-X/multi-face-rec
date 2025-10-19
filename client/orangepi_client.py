@@ -8,7 +8,7 @@ import json
 import os
 
 # Vercel API endpoint
-API_URL = os.getenv('API_URL', 'https://multi-face-rec.vercel.app/api/recognize')
+API_URL = os.getenv('API_URL', 'https://multi-face-rec-production.up.railway.app')
 
 def capture_and_recognize():
     """Capture image and send to Vercel for recognition"""

@@ -18,7 +18,7 @@ sudo apt-get install -y build-essential cmake gfortran git wget curl \
 
 # Create virtual environment
 echo "🔧 Creating virtual environment..."
-python3.10 -m venv venv
+python3 -m venv venv
 
 # Activate virtual environment
 echo "🔧 Activating virtual environment..."

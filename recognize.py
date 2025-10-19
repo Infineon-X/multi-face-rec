@@ -103,12 +103,8 @@ if __name__ == "__main__":
     # Process test images
     import sys
     
-    if len(sys.argv) > 1:
-        test_image = sys.argv[1]
-    else:
-        test_image = "test_images/test0.jpg"
-    
-    # Create output filename
-    output_image = test_image.replace('.jpg', '_output.jpg').replace('.png', '_output.png')
-    
-    recognize_faces_with_boxes(test_image, output_image, show_debug=True)
+    for i in range(3):
+        test_image = f"test_images/test{i}.jpg"
+        output_image = f"test_images/test{i}_output.jpg"
+        print(f"\n=== Processing: {test_image} ===")
+        recognize_faces_with_boxes(test_image, output_image, show_debug=True)

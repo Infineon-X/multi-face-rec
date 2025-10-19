@@ -16,17 +16,6 @@ sudo apt-get install -y build-essential cmake gfortran git wget curl \
     libjpeg-dev liblapack-dev libswscale-dev pkg-config \
     python3-dev python3-numpy python3-pip python3-venv zip
 
-# Clone repository (if not already cloned)
-if [ ! -d "face-recognition-project" ]; then
-    echo "📥 Cloning repository..."
-    read -p "Enter GitHub repo URL: " repo_url
-    git clone $repo_url face-recognition-project
-    cd face-recognition-project
-else
-    echo "📁 Project directory exists, entering..."
-    cd face-recognition-project
-fi
-
 # Create virtual environment
 echo "🔧 Creating virtual environment..."
 python3.10 -m venv venv

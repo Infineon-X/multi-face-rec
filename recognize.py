@@ -108,3 +108,6 @@ if __name__ == "__main__":
         output_image = f"test_images/test{i}_output.jpg"
         print(f"\n=== Processing: {test_image} ===")
         recognize_faces_with_boxes(test_image, output_image, show_debug=True)
+    test_image = "test_images/a.png"
+    output_image = "test_images/a_output.png"
+    recognize_faces_with_boxes(test_image, output_image, show_debug=True)

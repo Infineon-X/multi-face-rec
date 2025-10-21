@@ -11,6 +11,15 @@ training/*/*.webp
 training/*/*.ico
 training/*/*.svg
 training/*/*.avif
+training/*/*.pjpeg
+training/*/*.pjp
+training/*/*.ppng
+training/*/*.pwebp
+training/*/*.pico
+training/*/*.psvg
+training/*/*.pavif
+training/*/*.ppjpeg
+training/*/*.ppjp
 __pycache__/
 *.pyc
 *.pyo

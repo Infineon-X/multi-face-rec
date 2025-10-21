@@ -58,7 +58,7 @@ def train_faces(incremental=True):
         for fp in folder.glob("*"):
             if fp.is_file():
                 img = face_recognition.load_image_file(fp)
-                locs = face_recognition.face_locations(img, model="hog")
+                locs = face_recognition.face_locations(img, model="hog")  # Use "cnn" if GPU is available
                 codes = face_recognition.face_encodings(img, locs)
                 for code in codes:
                     names.append(person_name)

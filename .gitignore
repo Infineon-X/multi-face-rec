@@ -20,6 +20,7 @@ training/*/*.psvg
 training/*/*.pavif
 training/*/*.ppjpeg
 training/*/*.ppjp
+training/*/*.heic
 __pycache__/
 *.pyc
 *.pyo
